@@ -1,0 +1,5 @@
+**/bin
+**/obj
+Infrastructure/Migrations
+.idea
+.vs

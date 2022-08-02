@@ -1,0 +1,54 @@
+@{
+  Layout = "_Layout";
+  var Students = ViewData["students"] as IEnumerable<Application.DTOs.Students.StudentsResponse>;
+  var Subjects = ViewData["subjects"] as IEnumerable<Application.DTOs.Subjects.SubjectResponse>;
+}
+
+@model Application.DTOs.Classes.CreateClass
+
+<form asp-controller="Class" asp-action="Create" method="post">
+  <h3>Tạo lớp học</h3>
+  <div class="mb-3">
+    <label asp-for="Name"></label>
+    <input class="form-control" asp-for="Name"/>
+  </div>
+  <div class="mb-3">
+    <label asp-for="Monitor"></label>
+    <select class="form-control" asp-for="Monitor">
+      @foreach (var item in Students!)
+      {
+        <option value="@item.Id">@item.Name</option>
+      }
+    </select>
+  </div>
+  <div class="mb-3">
+    <label asp-for="Secretary"></label>
+    <select class="form-control" asp-for="Secretary">
+      @foreach (var item in Students!)
+      {
+        <option value="@item.Id">@item.Name</option>
+      }
+    </select>
+  </div>
+  <div class="mb-3">
+    <label asp-for="Students"></label>
+    <select class="form-control" multiple asp-for="Students">
+      @foreach (var item in Students!)
+      {
+        <option value="@item.Id">@item.Name</option>
+      }
+    </select>
+  </div>
+  <div class="mb-3">
+    <label asp-for="Subjects"></label>
+    <select class="form-control" multiple asp-for="Subjects">
+      @foreach (var item in Subjects!)
+      {
+        <option value="@item.Id">@item.Name</option>
+      }
+    </select>
+  </div>
+  <div class="mb-3">
+    <button class="btn btn-primary" type="submit">Tạo</button>
+  </div>
+</form>

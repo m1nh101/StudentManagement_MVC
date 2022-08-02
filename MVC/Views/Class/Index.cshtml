@@ -1,0 +1,39 @@
+@{
+  Layout = "_Layout";
+}
+
+@model IEnumerable<Application.DTOs.Classes.ClassResponse>
+
+<div class="container-fluid">
+  <div class="d-flex mb-3 p-2">
+    <a asp-action="Create" asp-controller="Class" >Thêm lớp học mới</a>
+    <a asp-action="MaxMale" asp-controller="Class">Lớp đông nam nhất</a>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Tên</th>
+        <th>Lớp trưởng</th>
+        <th>Bí thư</th>
+        <th>Sĩ số</th>
+        <th>Sĩ số nam</th>
+        <th>Sĩ số nữ</th>
+        <th>Môn học</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var _class in Model)
+      {
+        <tr>
+          <td>@_class.Name</td>
+          <td>@_class.Monitor</td>
+          <td>@_class.Secretary</td>
+          <td>@_class.Glosbe</td>
+          <td>@_class.MaleGlosbe</td>
+          <td>@_class.FemaleGlosbe</td>
+          <td>@string.Join(", ", _class.Subjects)</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

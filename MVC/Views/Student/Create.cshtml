@@ -1,0 +1,28 @@
+@using Application.Enums
+@model Application.DTOs.Students.CreateStudentCommand
+
+@{
+    Layout = "_Layout";
+}
+
+<form method="post" asp-action="Create" asp-controller="Student">
+    <h3>Thêm sinh viên mới</h3>
+    <div class="mb-3">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control"/>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Address"></label>
+        <input asp-for="Address" class="form-control"/>
+    </div>
+    <div class="mb-3">
+        <select class="form-control" asp-for="Gender" asp-items="Html.GetEnumSelectList(typeof(Gender))"></select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Birthday"></label>
+        <input type="date" class="form-control" asp-for="Birthday" />
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Thêm</button>
+    </div>
+</form>

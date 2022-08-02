@@ -1,0 +1,30 @@
+@model IEnumerable<Application.DTOs.Subjects.SubjectResponse>
+
+@{
+  Layout = "_Layout";
+}
+
+<div class="contaienr-fluid">
+  <div class="mb-3 p-2">
+    <a class="btn btn-primary" asp-action="Create">Thêm</a>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Tên</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var subject in Model)
+      {
+        <tr>
+          <td>@subject.Name</td>
+          <td>
+            <a>Chi tiet</a>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

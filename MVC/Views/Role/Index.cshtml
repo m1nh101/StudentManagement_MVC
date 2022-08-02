@@ -1,0 +1,29 @@
+@{
+  Layout = "_Layout";
+}
+
+@model IEnumerable<Tuple<string, string>>
+
+<div class="contaienr-fluid">
+  <div class="mb-3 p-2">
+    <a class="btn btn-primary" asp-controller="Role" asp-action="Create">Thêm</a>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Tên</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var role in Model)
+      {
+        <tr>
+          <td>@role.Item2</td>
+          <td>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

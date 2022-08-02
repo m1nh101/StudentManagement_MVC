@@ -1,0 +1,35 @@
+@model IEnumerable<Application.DTOs.Students.StudentsResponse>
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <div class="mb-3 p-2">
+        <a asp-controller="Student" asp-action="Create" class="btn btn-primary">Thêm</a>
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Họ và Tên</th>
+            <th>Giới tính</th>
+            <th>Ngày sinh</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach(var student in Model)
+    {
+        <tr>
+            <td>@student.Name</td>
+            <td>@student.Gender</td>
+            <td>@student.Address</td>
+            <td>
+                <a asp-action="" asp-route-id="@student.Id">Xóa</a>
+            </td>
+        </tr>
+    }
+        </tbody>
+    </table>
+</div>
+
