@@ -1,0 +1,36 @@
+@{
+  Layout = "_Layout";
+}
+
+@model Application.DTOs.Students.StatisticStudent
+
+<div class="container-fluid">
+  <a class="btn btn-primary" asp-action="Index" asp-controller="Student">Trở về</a>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Họ và Tên</th>
+        <th>Giới tính</th>
+        <th>Ngày sinh</th>
+        <th>Địa chỉ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>Trẻ tuổi nhất</th>
+        <td>@Model.YoungestStudent.Name</td>
+        <td>@Model.YoungestStudent.Gender</td>
+        <td>@Model.YoungestStudent.Birthday.ToShortDateString()</td>
+        <td>@Model.YoungestStudent.Address</td>
+      </tr>
+      <tr>
+        <th>Lớn tuổi nhất</th>
+        <td>@Model.OldestStudent.Name</td>
+        <td>@Model.OldestStudent.Gender</td>
+        <td>@Model.OldestStudent.Birthday.ToShortDateString()</td>
+        <td>@Model.OldestStudent.Address</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

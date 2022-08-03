@@ -5,8 +5,9 @@
 }
 
 <div class="contaienr-fluid">
-  <div class="mb-3 p-2">
+  <div class="mb-3 p-2 d-flex justiyf-content-between">
     <a class="btn btn-primary" asp-action="Create">Thêm</a>
+    <a class="btn btn-warning" asp-action="Export" asp-controller="Subject">Export</a>
   </div>
   <table class="table table-striped">
     <thead>
@@ -20,8 +21,12 @@
       {
         <tr>
           <td>@subject.Name</td>
-          <td>
-            <a>Chi tiet</a>
+          <td class="d-flex">
+            <a class="btn btn-primary me-2" asp-controller="Subject" asp-action="Detail" asp-route-id="@subject.Id">Chi tiết</a>
+            <form asp-controller="Subject" asp-action="Remove" method="post">
+              <input hidden name="Id" value="@subject.Id"/>
+              <button type="submit" class="btn btn-danger">Xóa</button>
+            </form>
           </td>
         </tr>
       }

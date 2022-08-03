@@ -10,7 +10,10 @@ public interface IClassService
 {
   Task<IEnumerable<ClassResponse>> GetAll();
   Task<bool> CreateNew(CreateClass command);
+  Task<bool> Delete(string id);
+  Task<bool> Update(EditClass command);
   Task<string> FindClassHaveHighestMale();
+  Task<ClassDetailResponse?> GetDetail(string id);
 }
 
 public class ClassService : IClassService
@@ -26,7 +29,6 @@ public class ClassService : IClassService
   {
     var _class = new Class(command.Name);
     var _classRole = new List<ClassRole>();
-    var _classStudent = new List<ClassStudentSubject>();
     
     if (command.Monitor != string.Empty)
     {
@@ -60,32 +62,32 @@ public class ClassService : IClassService
       });
     }
 
-    if (command.Students.Length > 0 || command.Subjects.Length > 0)
+    if(command.Students.Length > 0)
     {
-      foreach (var subjectId in command.Subjects)
+      foreach(var id in command.Students)
       {
-        var subject = await _context.Subjects.FindAsync(subjectId);
+        var student = await _context.Students.FindAsync(id);
+
+        if (student == null)
+          continue;
+        
+        _class.AddStudent(student);
+      }
+    } 
+
+    if(command.Subjects.Length > 0)
+    {
+      foreach(var id in command.Subjects)
+      {
+        var subject = await _context.Subjects.FindAsync(id);
 
         if (subject == null)
           continue;
-
-        foreach (var id in command.Students)
-        {
-          var student = await _context.Students.FindAsync(id);
-
-          if (student == null)
-            continue;
-
-          _classStudent.Add(new ClassStudentSubject
-          {
-            SubjectId = subjectId,
-            StudentId = id
-          });
-        }
+        
+        _class.AddSubject(subject);
       }
     }
-
-    _class.ClassStudentSubjects = _classStudent;
+   
     _class.ClassRoles = _classRole;
 
     await _context.Classes.AddAsync(_class);
@@ -100,24 +102,88 @@ public class ClassService : IClassService
     var secretary = await _context.Roles.FirstOrDefaultAsync(e => e.Name == "secretary");
 
     var query = _context.Classes
-      .Include(e => e.ClassStudentSubjects)!
-      .ThenInclude(e => e.Subject)
+      .Include(e => e.Students)
+      .Include(e => e.Subjects)
       .Include(e => e.ClassRoles)!
       .ThenInclude(e => e.Student)
-      .Select(e => new ClassResponse{
-        Id = e.Id,
+      .Select(e => new ClassResponse
+      {
         Name = e.Name,
-        Monitor = e.ClassRoles!.First(e => e.RoleId == monitor!.Id).Student!.Name,
-        Secretary = e.ClassRoles!.First(e => e.RoleId == secretary!.Id).Student!.Name,
-        Glosbe = e.ClassStudentSubjects!.Select(e => e.StudentId).Distinct().Count(),
-        MaleGlosbe = e.ClassStudentSubjects!.Select(e => new { e.Student!.Id, e.Student.Gender}).Distinct().Count(e => e.Gender == Enums.Gender.Male),
-        FemaleGlosbe = e.ClassStudentSubjects!.Select(e => new { e.Student!.Id, e.Student.Gender}).Distinct().Count(e => e.Gender == Enums.Gender.Female),
-        Subjects = e.ClassStudentSubjects!.Select(e => e.Subject!.Name).Distinct().ToArray()
+        Id = e.Id,
+        Glosbe = e.Students.Count,
+        MaleGlosbe = e.Students.Count(e => e.Gender == Enums.Gender.Male),
+        FemaleGlosbe = e.Students.Count(e => e.Gender == Enums.Gender.Female),
+        Monitor = e.ClassRoles!.First(e => e.RoleId == monitor!.Id)!.Student!.Name,
+        Secretary = e.ClassRoles!.First(e => e.RoleId == secretary!.Id)!.Student!.Name,
+        Subjects = e.Subjects!.Select(e => e.Name).ToArray()
       }).AsEnumerable();
 
+      var test = query.ToList();
 
     return query;
 
+  }
+
+  public async Task<ClassDetailResponse?> GetDetail(string id)
+  {
+    var monitor = await _context.Roles.FirstOrDefaultAsync(e => e.Name == "monitor");
+    var secretary = await _context.Roles.FirstOrDefaultAsync(e => e.Name == "secretary");
+
+    var result = await _context.Classes
+      .Include(e => e.Students)
+      .Include(e => e.Subjects)
+      .Include(e => e.ClassRoles)!
+      .ThenInclude(e => e.Student)
+      .Select(e => new ClassDetailResponse{
+        Name = e.Name,
+        Id = e.Id,
+        Monitor = e.ClassRoles!.First(e => e.RoleId == monitor!.Id)!.Student!.Name,
+        Secretary = e.ClassRoles!.First(e => e.RoleId == secretary!.Id)!.Student!.Name,
+        Subjects = e.Subjects!.Select(e => e.Name).ToArray(),
+        Students = e.Students!.Select(e => e.Name).ToArray()
+      }).FirstOrDefaultAsync(e => e.Id == id);
+
+      return result;
+  }
+
+  public async Task<bool> Update(EditClass command)
+  {
+
+    var exClass = await _context.Classes.FindAsync(command.Id);
+
+    if (exClass == null)
+      return false;
+
+    var createClass = new CreateClass()
+    {
+      Name = command.Name,
+      Subjects = command.Subjects,
+      Students = command.Students,
+      Monitor = command.Monitor,
+      Secretary = command.Secretary
+    };
+
+    var classCreated = await CreateNew(createClass);
+
+    if (classCreated)
+      _context.Classes.Remove(exClass);
+      await _context.Save();
+
+    return true;
+
+  }
+
+  public async Task<bool> Delete(string id)
+  {
+    var _class = await _context.Classes.FindAsync(id);
+
+    if (_class == null)
+      return false;
+
+    _context.Classes.Remove(_class);
+    await _context.Save();
+
+    return true;
   }
 
   public Task<string> FindClassHaveHighestMale()

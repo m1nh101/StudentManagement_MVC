@@ -14,3 +14,8 @@ public class CreateStudentCommand
     [Required, Display(Name = "Ngày sinh")]
     public DateTime Birthday { get; set; } = DateTime.UtcNow;
 }
+
+public class EditStudentCommand : CreateStudentCommand
+{
+    public string Id { get; set; } = string.Empty;
+}

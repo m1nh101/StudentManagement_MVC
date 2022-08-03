@@ -1,7 +1,85 @@
 @{
   Layout = "_Layout";
+  var detail = ViewData["detail"] as Application.DTOs.Classes.ClassDetailResponse ?? new();
+  var Students = ViewData["students"] as IEnumerable<Application.DTOs.Students.StudentsResponse>;
+  var Subjects = ViewData["subjects"] as IEnumerable<Application.DTOs.Subjects.SubjectResponse>;
 }
 
+@model Application.DTOs.Classes.EditClass
+
 <div class="container-fluid">
-  <
+  <div class="row">
+    <div class="col-8">
+      <form asp-controller="Class" asp-action="Edit" method="post">
+        <h3>Cập nhật</h3>
+        <input value="@detail.Id" hidden asp-for="Id"/>
+        <div class="mb-3">
+          <label asp-for="Name"></label>
+          <input value="@detail.Name" class="form-control" asp-for="Name" />
+        </div>
+        <div class="mb-3">
+          <label asp-for="Monitor"></label>
+          <select class="form-control" asp-for="Monitor">
+            @foreach (var item in Students!)
+            {
+              <option value="@item.Id">@item.Name</option>
+            }
+          </select>
+        </div>
+        <div class="mb-3">
+          <label asp-for="Secretary"></label>
+          <select class="form-control" asp-for="Secretary">
+            @foreach (var item in Students!)
+            {
+              <option value="@item.Id">@item.Name</option>
+            }
+          </select>
+        </div>
+        <div class="mb-3">
+          <label asp-for="Students"></label>
+          <select class="form-control" multiple asp-for="Students">
+            @foreach (var item in Students!)
+            {
+              <option value="@item.Id">@item.Name</option>
+            }
+          </select>
+        </div>
+        <div class="mb-3">
+          <label asp-for="Subjects"></label>
+          <select class="form-control" multiple asp-for="Subjects">
+            @foreach (var item in Subjects!)
+            {
+              <option value="@item.Id">@item.Name</option>
+            }
+          </select>
+        </div>
+        <div class="mb-3">
+          <button class="btn btn-primary" type="submit">Cập nhật</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-4 ps-2">
+      <p>Tên: @detail.Name</p>
+      <p>Lớp trưởng: @detail.Monitor</p>
+      <p>Bí thư: @detail.Secretary</p>
+      <div>
+        <p>Danh sách môn học: </p>
+        <ul>
+          @foreach (var item in @detail.Subjects)
+          {
+            <li>@item</li>
+          }
+        </ul>
+      </div>
+      <div>
+        <p>Danh sách sinh viên</p>
+        <ul>
+          @foreach (var item in @detail.Students)
+          {
+            <li>@item</li>
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>

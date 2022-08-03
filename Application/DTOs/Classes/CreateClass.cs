@@ -15,3 +15,8 @@ public class CreateClass
    [Display(Name = "Môn học")]
    public string[] Subjects { get; set; } = Array.Empty<string>();
 }
+
+public class EditClass : CreateClass
+{
+   public string Id { get; set; } = string.Empty;
+}

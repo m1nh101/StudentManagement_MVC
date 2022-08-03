@@ -15,7 +15,8 @@ public class Student
   public DateTime Birthday { get; set; }
   public string Address { get; set; } = string.Empty;
 
-  public virtual ICollection<ClassStudentSubject>? ClassStudentSubjects { get; set; }
+  public virtual ICollection<Class>? Classes { get; set;}
+  public virtual ICollection<ClassStudent>? ClassStudents { get; private set; }
   public virtual ICollection<ClassRole>? ClassRoles { get; set; }
 
 }

@@ -5,9 +5,10 @@
 @model IEnumerable<Application.DTOs.Classes.ClassResponse>
 
 <div class="container-fluid">
-  <div class="d-flex mb-3 p-2">
-    <a asp-action="Create" asp-controller="Class" >Thêm lớp học mới</a>
-    <a asp-action="MaxMale" asp-controller="Class">Lớp đông nam nhất</a>
+  <div class="d-flex justify-content-between mb-3 p-2">
+    <a class="btn btn-primary" asp-action="Create" asp-controller="Class" >Thêm lớp học mới</a>
+    <a class="btn btn-warning" asp-action="Export" asp-controller="Class">Export</a>
+    <a class="btn btn-info text-white" asp-action="MaxMale" asp-controller="Class">Lớp đông nam nhất</a>
   </div>
   <table class="table table-striped">
     <thead>
@@ -19,6 +20,7 @@
         <th>Sĩ số nam</th>
         <th>Sĩ số nữ</th>
         <th>Môn học</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -32,6 +34,13 @@
           <td>@_class.MaleGlosbe</td>
           <td>@_class.FemaleGlosbe</td>
           <td>@string.Join(", ", _class.Subjects)</td>
+          <td class="d-flex">
+            <a class="btn btn-primary me-2" asp-controller="Class" asp-action="Detail" asp-route-id="@_class.Id">Chi tiết</a>
+            <form asp-controller="Class" asp-action="Remove">
+              <input hidden name="Id" value="@_class.Id" />
+              <button class="btn btn-danger" type="submit">Xóa</button>
+            </form>
+          </td>
         </tr>
       }
     </tbody>

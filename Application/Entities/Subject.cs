@@ -10,5 +10,6 @@ public class Subject
   public string Id { get; }
   public string Name { get; set; } = string.Empty;
   public string ShortName { get; set; } = string.Empty;
-  public virtual ICollection<ClassStudentSubject>? ClassStudentSubjects { get; set; }
+  public virtual ICollection<Class>? Classes { get; private set; }
+  public virtual ICollection<ClassSubject>? ClassSubjects { get; private set; }
 }

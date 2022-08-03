@@ -1,0 +1,20 @@
+@{
+  Layout = "_Layout";
+}
+
+@model Application.DTOs.Subjects.SubjectResponse
+
+<div class="container">
+  <form method="post" asp-controller="Subject" asp-action="Edit">
+    <div class="mb-3">
+      <input type="text" hidden asp-for="Id" class="form-control"/>
+    </div>
+    <div class="mb-3">
+      <label asp-for="Name"></label>
+      <input type="text" asp-for="Name" class="form-control"/>
+    </div>
+    <div class="mb-3">
+      <button type="submit" class="btn btn-danger">Cập nhật</button>
+    </div>
+  </form>
+</div>

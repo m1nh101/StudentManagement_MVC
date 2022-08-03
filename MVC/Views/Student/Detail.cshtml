@@ -1,0 +1,32 @@
+@{
+  Layout = "_Layout";
+}
+
+@using Application.Enums
+
+@model Application.DTOs.Students.EditStudentCommand
+
+<form asp-action="Edit" asp-controller="Student" method="post">
+  <input type="text" hidden asp-for="Id" />
+  <div class="mb-3">
+    <label asp-for="Name"></label>
+    <input class="form-control" type="text" asp-for="Name" />
+  </div>
+  <div class="mb-3">
+    <label asp-for="Birthday"></label>
+    <input class="form-control" type="date" asp-for="Birthday" />
+  </div>
+  <div class="mb-3">
+    <label asp-for="Address"></label>
+    <input class="form-control" type="text" asp-for="Address" />
+  </div>
+  <div class="mb-3">
+    <label asp-for="Gender"></label>
+    <select asp-for="Gender" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Gender))"> 
+    </select>
+  </div>
+  <div class="mb-3 d-flex">
+    <button class="btn btn-primary me-2" type="submit">Thay đổi</button>
+    <a class="btn btn-danger" asp-action="Index" asp-controller="Student">Trở về</a>
+  </div>
+</form>
