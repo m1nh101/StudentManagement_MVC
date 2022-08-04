@@ -16,6 +16,7 @@
         <div class="mb-3">
           <label asp-for="Name"></label>
           <input value="@detail.Name" class="form-control" asp-for="Name" />
+          <span class="text-danger" asp-validation-for="Name"></span>
         </div>
         <div class="mb-3">
           <label asp-for="Monitor"></label>
@@ -25,6 +26,7 @@
               <option value="@item.Id">@item.Name</option>
             }
           </select>
+          <span class="text-danger" asp-validation-for="Monitor"></span>
         </div>
         <div class="mb-3">
           <label asp-for="Secretary"></label>
@@ -34,6 +36,7 @@
               <option value="@item.Id">@item.Name</option>
             }
           </select>
+          <span class="text-danger" asp-validation-for="Secretary"></span>
         </div>
         <div class="mb-3">
           <label asp-for="Students"></label>
@@ -43,6 +46,7 @@
               <option value="@item.Id">@item.Name</option>
             }
           </select>
+          <span class="text-danger" asp-validation-for="Students"></span>
         </div>
         <div class="mb-3">
           <label asp-for="Subjects"></label>
@@ -52,6 +56,7 @@
               <option value="@item.Id">@item.Name</option>
             }
           </select>
+          <span class="text-danger" asp-validation-for="Subjects"></span>
         </div>
         <div class="mb-3">
           <button class="btn btn-primary" type="submit">Cập nhật</button>

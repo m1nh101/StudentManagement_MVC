@@ -4,7 +4,7 @@ namespace Application.DTOs.Subjects;
 
 public class CreateSubject
 {
-  [Display(Name = "Tên môn học")]
+  [Display(Name = "Tên môn học"), Required(ErrorMessage = "Phải có tên môn học")]
   public string Name { get; set; } = string.Empty;
 }
 

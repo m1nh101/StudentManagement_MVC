@@ -17,10 +17,13 @@ public class SubjectController : Controller
   } 
 
   [HttpGet]
-  public async Task<IActionResult> Index()
+  public IActionResult Index() => View();
+
+  public async Task<IActionResult> GetAll()
   {
     var response = await _worker.SubjectService.GetAll();
-    return View(response);
+
+    return Json(new { data = response});
   }
 
   [HttpGet]
@@ -29,6 +32,9 @@ public class SubjectController : Controller
   [HttpPost]
   public async Task<IActionResult> Create(CreateSubject request)
   {
+    if(!ModelState.IsValid)
+      return View(request);
+
     await _worker.SubjectService.CreateNew(request);
 
     return RedirectToAction("Index");
@@ -55,6 +61,9 @@ public class SubjectController : Controller
   [HttpPost]
   public async Task<IActionResult> Edit(EditSubject subject)
   {
+    if(!ModelState.IsValid)
+      return View(subject);
+
     var response = await _worker.SubjectService.Update(subject);
 
     if (response)
@@ -63,13 +72,13 @@ public class SubjectController : Controller
     return BadRequest();
   }
 
-  [HttpPost]
+  [HttpDelete]
   public async Task<IActionResult> Remove(string id)
   {
     var response = await _worker.SubjectService.Remove(id);
 
     if (response)
-      return RedirectToAction("Index");
+      return NoContent();
 
     return BadRequest();
   }

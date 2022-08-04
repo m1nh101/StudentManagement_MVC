@@ -18,10 +18,14 @@ public class ClassController : Controller
   }
 
   [HttpGet]
-  public async Task<IActionResult> Index()
+  public IActionResult Index() => View();
+
+  [HttpGet]
+  [Route("GetAll")]
+  public async Task<IActionResult> GetAll()
   {
     var response = await _worker.ClassService.GetAll();
-    return View(response);
+    return Json(new { data = response });
   }
 
   [HttpGet]
@@ -58,6 +62,9 @@ public class ClassController : Controller
 
   public async Task<IActionResult> Edit(EditClass request)
   {
+    if (!ModelState.IsValid)
+      return View(request);
+
     var response = await _worker.ClassService.Update(request);
 
     if (response)
@@ -70,17 +77,20 @@ public class ClassController : Controller
   [Route("Create")]
   public async Task<IActionResult> Create(CreateClass request)
   {
+    if(!ModelState.IsValid)
+      return View(request);
+
     _ = await _worker.ClassService.CreateNew(request); 
     return RedirectToAction("Index");
   }
 
-  [HttpPost]
-  [Route("Remove")]
-  public async Task<IActionResult> Remove(string id)
+  [HttpDelete]
+  [Route("Remove/{id}")]
+  public async Task<IActionResult> Remove([FromRoute] string id)
   {
     var response = await _worker.ClassService.Delete(id);
     if (response)
-      return RedirectToAction("Index");
+      return NoContent();
     
     return BadRequest();
   }

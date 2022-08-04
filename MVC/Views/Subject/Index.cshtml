@@ -9,27 +9,53 @@
     <a class="btn btn-primary" asp-action="Create">Thêm</a>
     <a class="btn btn-warning" asp-action="Export" asp-controller="Subject">Export</a>
   </div>
-  <table class="table table-striped">
+  <table class="table table-striped" id="subject-table">
     <thead>
       <tr>
         <th>Tên</th>
         <th></th>
       </tr>
     </thead>
-    <tbody>
-      @foreach (var subject in Model)
-      {
-        <tr>
-          <td>@subject.Name</td>
-          <td class="d-flex">
-            <a class="btn btn-primary me-2" asp-controller="Subject" asp-action="Detail" asp-route-id="@subject.Id">Chi tiết</a>
-            <form asp-controller="Subject" asp-action="Remove" method="post">
-              <input hidden name="Id" value="@subject.Id"/>
-              <button type="submit" class="btn btn-danger">Xóa</button>
-            </form>
-          </td>
-        </tr>
-      }
-    </tbody>
+
   </table>
 </div>
+
+@section Scripts
+{
+<script type="text/javascript">
+  var table;
+  $(document).ready(() => {
+    table = $("#subject-table").DataTable({
+      ajax: {
+        url: '@Url.Action("GetAll")',
+        type: 'get',
+        dataType: 'json'
+      },
+      columns: [
+        { data: "name" },
+        {
+          data: "id",
+          orderable: false,
+          render: (data) => {
+            return `<div class="d-flex">
+                <a href="Detail/${data}" class="btn btn-primary me-2">Chi tiết</a>
+                <button class="btn btn-danger delete" data-id="${data}">Xóa</button>
+              </div>`
+          }
+        }
+      ]
+    })
+    $("#subject-table").on('click', 'button.delete', (e) => {
+      e.preventDefault()
+      const id = $(e.currentTarget).data('id')
+      $.ajax({
+        url: 'Subject/Remove/' + id,
+        type: 'DELETE',
+        dataType: 'json',
+        success: (res) => table.ajax.reload(),
+        error: (err) => console.log(err)
+      })
+    })
+  })
+</script>
+}

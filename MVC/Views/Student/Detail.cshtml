@@ -11,19 +11,23 @@
   <div class="mb-3">
     <label asp-for="Name"></label>
     <input class="form-control" type="text" asp-for="Name" />
+    <span class="text-danger" asp-validation-for="Name"></span>
   </div>
   <div class="mb-3">
     <label asp-for="Birthday"></label>
     <input class="form-control" type="date" asp-for="Birthday" />
+    <span class="text-danger" asp-validation-for="Birthday"></span>
   </div>
   <div class="mb-3">
     <label asp-for="Address"></label>
     <input class="form-control" type="text" asp-for="Address" />
+    <span class="text-danger" asp-validation-for="Address"></span>
   </div>
   <div class="mb-3">
     <label asp-for="Gender"></label>
     <select asp-for="Gender" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Gender))"> 
     </select>
+    <span class="text-danger" asp-validation-for="Gender"></span>
   </div>
   <div class="mb-3 d-flex">
     <button class="btn btn-primary me-2" type="submit">Thay đổi</button>

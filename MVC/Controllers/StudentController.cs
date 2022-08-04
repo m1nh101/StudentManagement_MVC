@@ -16,15 +16,14 @@ public class StudentController : Controller
     _worker = worker;
   }
 
-  // GET
-  public async Task<IActionResult> Index(string input = "")
+  [HttpGet]
+  public IActionResult Index() => View();
+  
+  [Route("GetAll")]
+  public async Task<IActionResult> GetAll()
   {
-    IEnumerable<StudentsResponse> _response;
-    if (input == string.Empty || input == null)
-      _response = await _worker.StudentService.GetAll();
-    else
-      _response = await _worker.StudentService.Filter(input);
-    return View(_response);
+    var response = await _worker.StudentService.GetAll();
+    return Json(new { data = response });
   }
 
   [HttpGet]
@@ -56,6 +55,9 @@ public class StudentController : Controller
   [Route("Create")]
   public async Task<IActionResult> Create(CreateStudentCommand command)
   {
+    if(!ModelState.IsValid)
+      return View(command);
+
     await _worker.StudentService.CreateNew(command);
     return RedirectToAction("Index");
   }
@@ -64,6 +66,10 @@ public class StudentController : Controller
   [Route("Edit")]
   public async Task<IActionResult> Edit(EditStudentCommand command)
   {
+    if (!ModelState.IsValid)
+      return View(command);
+
+
     var response = await _worker.StudentService.Update(command);
 
     if (response)
@@ -71,14 +77,14 @@ public class StudentController : Controller
     return BadRequest();
   }
 
-  [HttpPost]
-  [Route("Delete")]
-  public async Task<IActionResult> Remove(string id)
+  [HttpDelete]
+  [Route("Remove/{id}")]
+  public async Task<IActionResult> Remove([FromRoute]string id)
   {
     var response = await _worker.StudentService.Delete(id);
 
     if (response)
-      return RedirectToAction("Index", "Student");
+      return NoContent();
     return BadRequest();
   }
 

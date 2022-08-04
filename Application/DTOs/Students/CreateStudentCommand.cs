@@ -5,13 +5,14 @@ namespace Application.DTOs.Students;
 
 public class CreateStudentCommand
 {
-    [Required, Display(Name = "Họ và Tên")]
+    [Required(ErrorMessage = "Phải nhập tên"), Display(Name = "Họ và Tên")]
+    [RegularExpression(@"^[A-ZÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ][a-zàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]*(?:[ ][A-ZÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ][a-zàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]*)*$", ErrorMessage ="Tên không đúng định dạng")]
     public string Name { get; set; } = string.Empty;
     [Required, Display(Name = "Giới tính")]
     public Gender Gender { get; set; }
-    [Required, Display(Name = "Địa chỉ")]
+    [Required(ErrorMessage = "Phải nhập địa chỉ"), Display(Name = "Địa chỉ")]
     public string Address { get; set; } = string.Empty;
-    [Required, Display(Name = "Ngày sinh")]
+    [Required(ErrorMessage = "Phải nhập ngày sinh"), Display(Name = "Ngày sinh")]
     public DateTime Birthday { get; set; } = DateTime.UtcNow;
 }
 

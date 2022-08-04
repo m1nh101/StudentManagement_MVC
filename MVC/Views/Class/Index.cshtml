@@ -10,7 +10,7 @@
     <a class="btn btn-warning" asp-action="Export" asp-controller="Class">Export</a>
     <a class="btn btn-info text-white" asp-action="MaxMale" asp-controller="Class">Lớp đông nam nhất</a>
   </div>
-  <table class="table table-striped">
+  <table class="table table-striped" id="class-table">
     <thead>
       <tr>
         <th>Tên</th>
@@ -23,26 +23,50 @@
         <th></th>
       </tr>
     </thead>
-    <tbody>
-      @foreach (var _class in Model)
-      {
-        <tr>
-          <td>@_class.Name</td>
-          <td>@_class.Monitor</td>
-          <td>@_class.Secretary</td>
-          <td>@_class.Glosbe</td>
-          <td>@_class.MaleGlosbe</td>
-          <td>@_class.FemaleGlosbe</td>
-          <td>@string.Join(", ", _class.Subjects)</td>
-          <td class="d-flex">
-            <a class="btn btn-primary me-2" asp-controller="Class" asp-action="Detail" asp-route-id="@_class.Id">Chi tiết</a>
-            <form asp-controller="Class" asp-action="Remove">
-              <input hidden name="Id" value="@_class.Id" />
-              <button class="btn btn-danger" type="submit">Xóa</button>
-            </form>
-          </td>
-        </tr>
-      }
-    </tbody>
   </table>
 </div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(() => {
+    let table = $("#class-table").DataTable({
+      ajax: {
+        url: '@Url.Action("GetAll")',
+        type: 'get',
+        dataType: 'json'
+      },
+      columns: [
+        { data: "name" },
+        { data: "monitor"},
+        { data: "secretary"},
+        { data: "glosbe"},
+        { data: "maleGlosbe"},
+        { data: "femaleGlosbe"},
+        { data: "subjects"},
+        {
+          data: "id",
+          orderable: false,
+          render: (data) => {
+            return `<div class="d-flex">
+                <a href="Class/Detail/${data}" class="btn btn-primary me-2">Chi tiết</a>
+                <button class="btn btn-danger delete" data-id="${data}">Xóa</button>
+              </div>`
+          }
+        }
+      ]
+    })
+    $("#class-table").on('click', 'button.delete', (e) => {
+      e.preventDefault()
+      const id = $(e.currentTarget).data('id')
+      $.ajax({
+        url: 'Class/Remove/' + id,
+        type: 'DELETE',
+        dataType: 'json',
+        success: (res) => table.ajax.reload(),
+        error: (err) => console.log(err)
+      })
+    })
+  })
+    </script>
+}
